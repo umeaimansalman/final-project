@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Languages Roadmap | Learn to Code</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="./logo.png">
+
+    <style>
+        /* ===================================
+           DESIGN TOKENS & RESET
+        =================================== */
+        :root {
+            /* Palette: Light Sky Blue & Rose Pink */
+            --primary-blue: #4f46e5;
+            --primary-pink: #ec4899;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+            
+            /* Backgrounds */
+            --bg-gradient: linear-gradient(120deg, #e0f2fe 0%, #f3e8ff 40%, #ffe4e6 100%);
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --card-hover-bg: rgba(255, 255, 255, 0.95);
+            
+            /* Typography */
+            --font-main: 'Outfit', sans-serif;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            
+            /* Shadows & Effects */
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            --shadow-lg: 0 20px 40px -5px rgba(79, 70, 229, 0.15), 0 8px 16px -6px rgba(236, 72, 153, 0.1);
+            --shadow-glow: 0 0 20px rgba(236, 72, 153, 0.15);
+            
+            /* Transitions (Smooth/Elastic) */
+            --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===================================
+           SMOOTH DOTS PRELOADER
+        =================================== */
+        .loader-wrapper {
+            position: fixed;
+            inset: 0;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease-in-out;
+        }
+
+        .dots-loader {
+            display: flex;
+            gap: 15px;
+        }
+
+        .dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            animation: bounceWave 0.6s infinite alternate;
+        }
+        
+        .dot:nth-child(1) { background: #6366f1; animation-delay: 0.1s; }
+        .dot:nth-child(2) { background: #ec4899; animation-delay: 0.2s; }
+        .dot:nth-child(3) { background: #8b5cf6; animation-delay: 0.3s; }
+
+        @keyframes bounceWave {
+            from { transform: translateY(0) scale(1); opacity: 0.7; }
+            to { transform: translateY(-25px) scale(1.2); opacity: 1; }
+        }
+
+        .loader-text {
+            margin-top: 40px;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* ===================================
+           GLASS NAVBAR
+        =================================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            z-index: 1000;
+            transition: var(--ease-smooth);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-pink);
+            transform: translateX(-50%);
+            transition: width 0.3s var(--ease-elastic);
+        }
+
+        .nav-links a:hover { color: var(--primary-pink); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* Mobile Menu */
+        .menu-toggle { display: none; cursor: pointer; }
+        .bar { width: 25px; height: 2px; background: var(--text-main); margin: 6px 0; transition: 0.3s; }
+
+        /* ===================================
+           HERO SECTION
+        =================================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 1rem;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        /* Decorative blurred blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .blob-1 { top: 10%; left: 10%; width: 300px; height: 300px; background: #e0e7ff; }
+        .blob-2 { bottom: 10%; right: 10%; width: 400px; height: 400px; background: #fce7f3; }
+
+        .hero-content {
+            max-width: 900px;
+            animation: slideUpFade 1s var(--ease-smooth) forwards;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: var(--accent-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3);
+            transition: transform 0.4s var(--ease-elastic), box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 30px rgba(79, 70, 229, 0.4);
+        }
+
+        /* ===================================
+           LAYOUT & SECTIONS
+        =================================== */
+        .container { max-width: 1200px; margin: 0 auto; padding: 6rem 1.5rem; }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-main); }
+        .section-header p { color: var(--text-muted); font-size: 1.1rem; }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        /* ===================================
+           INFO CARDS (Original Content)
+        =================================== */
+        .info-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 20px;
+            transition: all 0.3s var(--ease-smooth);
+            box-shadow: var(--shadow-sm);
+        }
+        .info-card:hover { 
+            transform: translateY(-10px); 
+            background: var(--card-hover-bg);
+            box-shadow: var(--shadow-lg); 
+        }
+        .info-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        .info-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ===================================
+           LANGUAGE CARDS (Original Content)
+        =================================== */
+        .language-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            cursor: pointer;
+            transition: all 0.4s var(--ease-smooth);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .language-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 6px;
+            background: var(--accent-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s var(--ease-smooth);
+        }
+
+        .language-card:hover {
+            transform: translateY(-12px);
+            background: var(--card-hover-bg);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        .language-card:hover::before { transform: scaleX(1); }
+
+        .lang-icon {
+            width: 65px;
+            height: 65px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.4s var(--ease-elastic);
+            margin-bottom: 1.5rem;
+        }
+
+        .language-card:hover .lang-icon { transform: rotate(10deg) scale(1.1); }
+
+        .language-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-main);
+        }
+
+        .language-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            flex-grow: 1; /* Pushes tags to bottom */
+        }
+
+        .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; }
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            background: rgba(236, 72, 153, 0.1);
+            color: var(--primary-pink);
+            font-weight: 600;
+        }
+
+        /* ===================================
+           ROADMAP DISPLAY (Detailed Original Content)
+        =================================== */
+        .roadmap-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 4rem 2rem;
+            box-shadow: var(--shadow-lg);
+            margin-top: 3rem;
+            animation: fadeInScale 0.5s var(--ease-elastic);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .roadmap-container.active { display: block; }
+
+        .back-btn {
+            background: white;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn:hover { background: var(--primary-blue); color: white; transform: translateX(-5px); }
+
+        .roadmap-intro {
+            background: rgba(99, 102, 241, 0.05);
+            border-left: 4px solid var(--primary-blue);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+        .roadmap-intro h3 { color: var(--primary-blue); margin-bottom: 0.5rem; }
+        .roadmap-intro p { color: var(--text-muted); margin-bottom: 1rem; }
+
+        .roadmap-timeline {
+            position: relative;
+            padding-left: 30px;
+            border-left: 3px solid rgba(0,0,0,0.05);
+        }
+
+        .step-item {
+            position: relative;
+            margin-bottom: 3rem;
+            animation: slideInLeft 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .step-dot {
+            position: absolute;
+            left: -39px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background: var(--primary-pink);
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.2);
+        }
+
+        .step-item h4 { font-size: 1.4rem; margin-bottom: 0.8rem; color: var(--primary-blue); }
+        .step-item p { color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem; }
+        
+        .step-item ul { list-style: none; }
+        .step-item li { 
+            color: var(--text-muted); 
+            margin-bottom: 0.6rem; 
+            padding-left: 1.5rem; 
+            position: relative; 
+            font-size: 0.95rem;
+        }
+        .step-item li::before { 
+            content: '▹'; 
+            position: absolute; 
+            left: 0; 
+            color: var(--primary-pink); 
+            font-weight: bold; 
+        }
+
+        /* ===================================
+           FAQ SECTION
+        =================================== */
+        .faq-wrapper { max-width: 900px; margin: 0 auto 4rem auto; }
+        .faq-item {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.8); }
+
+        .faq-q {
+            padding: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        .faq-q::after { content: '+'; font-size: 1.5rem; color: var(--primary-pink); transition: 0.3s; }
+        
+        .faq-item.active .faq-q::after { transform: rotate(45deg); }
+        
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s var(--ease-smooth), padding 0.4s ease;
+            padding: 0 1.5rem;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        .faq-item.active .faq-a { max-height: 500px; padding-bottom: 1.5rem; }
+
+        /* ===================================
+           FOOTER (Newest Style)
+        =================================== */
+        footer {
+            background: white;
+            padding: 4rem 1.5rem 2rem;
+            margin-top: 6rem;
+            text-align: center;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .footer-content h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-tagline { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem auto; }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .footer-links a { text-decoration: none; color: var(--text-main); font-weight: 500; transition: 0.3s; }
+        .footer-links a:hover { color: var(--primary-pink); }
+
+        .copyright { color: #cbd5e1; font-size: 0.9rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; }
+
+        /* ===================================
+           ANIMATIONS
+        =================================== */
+        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .scroll-anim { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .scroll-anim.visible { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links {
+                position: fixed; right: -100%; top: 70px; width: 100%; height: calc(100vh - 70px);
+                background: white; flex-direction: column; align-items: center; padding-top: 2rem;
+                transition: 0.4s var(--ease-elastic);
+            }
+            .nav-links.active { right: 0; }
+            .menu-toggle { display: block; }
+            .roadmap-container { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="loader-wrapper" id="loader">
+        <div class="dots-loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="loader-text">Loading Your Journey...</div>
+    </div>
+
+    <!-- Background Elements -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo" onclick="window.scrollTo(0,0)">CodePath</div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#languages">Languages</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="menu-toggle" id="mobile-menu">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero" id="home">
+        <div class="hero-content">
+            <h1>Master Programming <br><span>Languages Roadmap</span></h1>
+            <p>Embark on your coding journey with our comprehensive roadmaps designed to guide you from beginner to expert in the most in-demand programming languages.</p>
+            <a href="#languages" class="cta-button">Start Learning</a>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- Introduction Section (Original Content) -->
+        <section id="about" class="scroll-anim">
+            <div class="section-header">
+                <h2>What Are Programming Languages?</h2>
+            </div>
+            
+            <div class="grid-layout">
+                <div class="info-card">
+                    <h3>The Foundation of Technology</h3>
+                    <p>Programming languages are structured systems of communication that allow humans to give instructions to computers. They serve as the bridge between human logic and machine execution, enabling us to create everything from simple calculators to complex artificial intelligence systems.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>Why Learn Programming?</h3>
+                    <p>Learning to code opens doors to countless career opportunities, enhances problem-solving skills, and empowers you to bring your ideas to life. In today's digital age, programming literacy is as essential as reading and writing.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>Where Are They Used?</h3>
+                    <p>Programming languages power everything around us. Web development uses HTML, CSS, and JavaScript. Mobile apps rely on Java, C#, and Python. System software and games utilize C++. From websites to spacecraft, programming languages are the invisible force driving modern technology.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Language Cards (Original Descriptions) -->
+        <section id="languages" class="scroll-anim">
+            <div class="section-header">
+                <h2>Choose Your Path</h2>
+            </div>
+
+            <div class="grid-layout">
+                <!-- HTML Card -->
+                <div class="language-card" onclick="showRoadmap('html')">
+                    <div class="lang-icon">🌐</div>
+                    <h3>HTML</h3>
+                    <p>The backbone of every website. Learn to structure web content and create the foundation of the internet.</p>
+                    <div class="tags"><span class="tag">Web Development</span><span class="tag">Beginner Friendly</span></div>
+                </div>
+
+                <!-- CSS Card -->
+                <div class="language-card" onclick="showRoadmap('css')">
+                    <div class="lang-icon">🎨</div>
+                    <h3>CSS</h3>
+                    <p>Bring websites to life with stunning visuals. Master styling, animations, and responsive design.</p>
+                    <div class="tags"><span class="tag">Web Design</span><span class="tag">Creative</span></div>
+                </div>
+
+                <!-- JavaScript Card -->
+                <div class="language-card" onclick="showRoadmap('js')">
+                    <div class="lang-icon">⚡</div>
+                    <h3>JavaScript</h3>
+                    <p>Add interactivity to websites. The most popular language for web development worldwide.</p>
+                    <div class="tags"><span class="tag">Interactive Web</span><span class="tag">High Demand</span></div>
+                </div>
+
+                <!-- Java Card -->
+                <div class="language-card" onclick="showRoadmap('java')">
+                    <div class="lang-icon">☕</div>
+                    <h3>Java</h3>
+                    <p>Power enterprise applications and Android apps. Write once, run anywhere.</p>
+                    <div class="tags"><span class="tag">Enterprise</span><span class="tag">Mobile Apps</span></div>
+                </div>
+
+                <!-- Python Card -->
+                <div class="language-card" onclick="showRoadmap('python')">
+                    <div class="lang-icon">🐍</div>
+                    <h3>Python</h3>
+                    <p>The most versatile language for AI, data science, automation, and web development.</p>
+                    <div class="tags"><span class="tag">AI & ML</span><span class="tag">Data Science</span></div>
+                </div>
+
+                <!-- C++ Card -->
+                <div class="language-card" onclick="showRoadmap('cpp')">
+                    <div class="lang-icon">⚙️</div>
+                    <h3>C++</h3>
+                    <p>Build high-performance systems and games. Master memory management and efficiency.</p>
+                    <div class="tags"><span class="tag">Game Dev</span><span class="tag">Systems</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Roadmap Area -->
+        <section id="roadmap-display-area"></section>
+
+        <!-- FAQ (Original Content) -->
+        <section id="faq" class="scroll-anim">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-wrapper">
+                <div class="faq-item">
+                    <div class="faq-q">What is a programming language roadmap?</div>
+                    <div class="faq-a">
+                        <p>A programming language roadmap is a structured learning path that guides you from beginner to advanced levels in a specific language. It breaks down the learning process into clear, manageable steps, showing you what to learn and in what order. Think of it as a GPS for your coding journey - it helps you navigate the vast world of programming by providing direction, milestones, and clear objectives.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-q">Which programming language should I start with as a beginner?</div>
+                    <div class="faq-a">
+                        <p>The best starting language depends on your goals. For web development, start with HTML and CSS to understand web basics, then move to JavaScript. If you want to learn programming concepts easily, Python is excellent due to its simple, readable syntax. However, Python is often recommended for absolute beginners because it reads like English.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-q">Can I learn multiple programming languages at the same time?</div>
+                    <div class="faq-a">
+                        <p>While it's possible, it's generally not recommended for beginners. Learning multiple languages simultaneously can lead to confusion. It's better to focus on one language until you're comfortable with its fundamentals. Once you have a solid foundation in one language, learning additional languages becomes much easier.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-q">How long does it take to learn a programming language?</div>
+                    <div class="faq-a">
+                        <p>The timeline varies greatly depending on your dedication. To grasp basics and write simple programs, expect 2-3 months of consistent study. To become comfortable and build small projects independently, plan for 6-12 months. To reach a professional level where you can get hired, typically 1-2 years of focused learning and practice.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-q">Do I need to learn all these programming languages?</div>
+                    <div class="faq-a">
+                        <p>Absolutely not! You don't need to learn all programming languages - that would be impossible. Most professional developers specialize in 2-4 languages maximum. Choose languages based on your career goals. It's better to be excellent at one language than mediocre at five.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Newest Footer -->
+    <footer>
+        <div class="footer-content">
+            <h3>CodePath</h3>
+            <p class="footer-tagline">Your Gateway to Programming Excellence. Designing the future, one line of code at a time.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Support</a>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Programming Languages Roadmap | All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS Logic -->
+    <script>
+        // 1. Preloader
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 600);
+            }, 1500);
+        });
+
+        // 2. Mobile Menu
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+        
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const bars = document.querySelectorAll('.bar');
+            if (navLinks.classList.contains('active')) {
+                bars[0].style.transform = 'rotate(-45deg) translate(-5px, 6px)';
+                bars[1].style.opacity = '0';
+                bars[2].style.transform = 'rotate(45deg) translate(-5px, -6px)';
+            } else {
+                bars[0].style.transform = 'none';
+                bars[1].style.opacity = '1';
+                bars[2].style.transform = 'none';
+            }
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => navLinks.classList.remove('active'));
+        });
+
+        // 3. Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-anim').forEach(el => observer.observe(el));
+
+        // 4. FAQ Interaction
+        document.querySelectorAll('.faq-q').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const wasActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                if (!wasActive) item.classList.add('active');
+            });
+        });
+
+        // 5. ORIGINAL ROADMAP DATA (Full Content)
+        const roadmapData = {
+            html: {
+                title: "HTML Roadmap",
+                intro: "HTML (HyperText Markup Language) is the standard markup language for creating web pages. It provides the structure and content of websites by using a system of tags to define elements like headings, paragraphs, links, images, and more.",
+                steps: [
+                    { title: "1. HTML Basics", desc: "Start your journey by understanding the fundamentals of HTML structure and syntax.", items: ["Understanding HTML document structure (DOCTYPE, html, head, body)", "Basic tags: headings (h1-h6), paragraphs, line breaks", "Text formatting: bold, italic, underline, emphasis", "Comments in HTML", "Creating your first HTML page"] },
+                    { title: "2. Links and Images", desc: "Learn to connect pages and add visual content to your websites.", items: ["Anchor tags and hyperlinks", "Absolute vs relative URLs", "Adding images with proper attributes", "Image optimization basics", "Creating navigation menus"] },
+                    { title: "3. Lists and Tables", desc: "Organize content in structured formats for better readability.", items: ["Ordered lists (numbered)", "Unordered lists (bullet points)", "Nested lists", "Creating tables with rows and columns", "Table headers, footers, and captions"] },
+                    { title: "4. Forms and Input", desc: "Build interactive forms to collect user data and enable user interaction.", items: ["Form elements and structure", "Input types: text, email, password, number, date", "Textareas, dropdowns, and checkboxes", "Radio buttons and file uploads", "Form validation attributes"] },
+                    { title: "5. Semantic HTML", desc: "Write meaningful, accessible HTML that describes content structure.", items: ["Header, nav, main, section, article tags", "Aside, footer, and figure elements", "Importance of semantic markup for SEO", "Accessibility best practices", "ARIA attributes basics"] },
+                    { title: "6. Multimedia and Advanced Elements", desc: "Enhance your pages with audio, video, and modern HTML5 features.", items: ["Embedding videos with video tag", "Audio elements and controls", "Canvas for graphics", "SVG integration", "IFrame usage"] },
+                    { title: "7. Practice Projects", desc: "Apply your knowledge by building real-world projects.", items: ["Create a personal portfolio page", "Build a blog layout structure", "Design a restaurant menu page", "Create a survey or registration form", "Build a product landing page"] },
+                    { title: "8. Next Steps", desc: "Continue your web development journey with these complementary skills.", items: ["Learn CSS to style your HTML pages", "Study responsive web design principles", "Explore JavaScript for interactivity", "Understand web accessibility (WCAG guidelines)", "Learn version control with Git"] }
+                ]
+            },
+            css: {
+                title: "CSS Roadmap",
+                intro: "CSS (Cascading Style Sheets) is the styling language used to control the visual presentation of web pages. While HTML provides the structure, CSS brings that structure to life with colors, layouts, fonts, animations, and responsive designs.",
+                steps: [
+                    { title: "1. CSS Fundamentals", desc: "Master the basic syntax and ways to apply styles to your HTML.", items: ["CSS syntax: selectors, properties, and values", "Three ways to add CSS: inline, internal, external", "Element, class, and ID selectors", "Understanding the cascade and specificity", "Browser developer tools basics"] },
+                    { title: "2. Colors, Text, and Fonts", desc: "Learn to style text and choose colors effectively.", items: ["Color formats: named, hex, RGB, HSL", "Font properties: family, size, weight, style", "Text alignment, decoration, and transformation", "Line height and letter spacing", "Using Google Fonts and custom fonts"] },
+                    { title: "3. Box Model and Layout Basics", desc: "Understand how elements are sized and spaced on the page.", items: ["The CSS box model: content, padding, border, margin", "Width, height, and box-sizing property", "Display property: block, inline, inline-block", "Borders: style, width, radius", "Shadows and basic visual effects"] },
+                    { title: "4. Positioning and Floating", desc: "Control element placement with various positioning methods.", items: ["Position: static, relative, absolute, fixed, sticky", "Z-index and stacking contexts", "Float and clear properties", "Overflow handling", "Creating simple layouts with positioning"] },
+                    { title: "5. Flexbox Layout", desc: "Master modern one-dimensional layout system for flexible designs.", items: ["Flex container and flex items", "Flex-direction, justify-content, align-items", "Flex-wrap and flex-flow", "Order, flex-grow, flex-shrink, flex-basis", "Building navigation bars and card layouts"] },
+                    { title: "6. CSS Grid Layout", desc: "Create complex two-dimensional layouts with CSS Grid.", items: ["Grid container and grid items", "Grid template rows, columns, and areas", "Gap, grid-column, and grid-row", "Responsive grids with auto-fit and auto-fill", "Creating magazine-style and dashboard layouts"] },
+                    { title: "7. Responsive Design", desc: "Make your websites work beautifully on all device sizes.", items: ["Mobile-first design approach", "Media queries: breakpoints and conditions", "Viewport meta tag", "Responsive units: %, em, rem, vh, vw", "Testing on different screen sizes"] },
+                    { title: "8. Transitions and Animations", desc: "Add motion and interactivity to engage users.", items: ["CSS transitions: property, duration, timing", "Transform property: translate, rotate, scale", "Keyframe animations", "Animation properties: duration, delay, iteration", "Creating hover effects and loading animations"] },
+                    { title: "9. Advanced CSS", desc: "Explore modern CSS features and best practices.", items: ["CSS variables (custom properties)", "Pseudo-classes and pseudo-elements", "Gradient backgrounds", "Filters and blend modes", "CSS preprocessors introduction (Sass basics)"] },
+                    { title: "10. Practice Projects", desc: "Build complete, styled websites to solidify your skills.", items: ["Create a responsive portfolio website", "Design an e-commerce product page", "Build a modern landing page", "Create an animated navigation menu", "Design a dashboard layout with Grid"] },
+                    { title: "11. Next Steps", desc: "Advance your frontend development expertise.", items: ["Learn CSS frameworks (Bootstrap, Tailwind)", "Study JavaScript for dynamic styling", "Explore CSS-in-JS solutions", "Master browser compatibility techniques", "Learn performance optimization for CSS"] }
+                ]
+            },
+            js: {
+                title: "JavaScript Roadmap",
+                intro: "JavaScript is a high-level, dynamic programming language that enables interactive web pages. It's one of the core technologies of the web, alongside HTML and CSS. It runs in the browser and, with Node.js, on servers too.",
+                steps: [
+                    { title: "1. JavaScript Basics", desc: "Start with fundamental concepts and syntax.", items: ["Variables: var, let, const", "Data types: strings, numbers, booleans, null, undefined", "Operators: arithmetic, comparison, logical", "Console methods for debugging", "Comments and code structure"] },
+                    { title: "2. Control Flow", desc: "Learn to control program execution with conditionals and loops.", items: ["If, else if, else statements", "Switch statements", "Ternary operator", "For, while, and do-while loops", "Break and continue statements"] },
+                    { title: "3. Functions", desc: "Master reusable code blocks and function concepts.", items: ["Function declarations and expressions", "Arrow functions", "Parameters and return values", "Scope: global, function, block", "Higher-order functions and callbacks"] },
+                    { title: "4. Arrays and Objects", desc: "Work with complex data structures efficiently.", items: ["Creating and accessing arrays", "Array methods: push, pop, shift, unshift, splice", "Object properties and methods", "Object destructuring", "Array iteration: forEach, map, filter, reduce"] },
+                    { title: "5. DOM Manipulation", desc: "Interact with HTML and CSS to create dynamic pages.", items: ["Selecting elements: getElementById, querySelector", "Modifying content: innerHTML, textContent", "Changing styles and classes", "Creating and removing elements", "Event listeners and event handling"] },
+                    { title: "6. Asynchronous JavaScript", desc: "Handle time-consuming operations without blocking code execution.", items: ["setTimeout and setInterval", "Callbacks and callback hell", "Promises: then, catch, finally", "Async/await syntax", "Error handling in async code"] },
+                    { title: "7. Working with APIs", desc: "Fetch data from external sources and web services.", items: ["Understanding REST APIs", "Fetch API basics", "HTTP methods: GET, POST, PUT, DELETE", "Working with JSON data", "Handling API responses and errors"] },
+                    { title: "8. ES6+ Features", desc: "Learn modern JavaScript syntax and features.", items: ["Template literals", "Spread and rest operators", "Destructuring assignment", "Modules: import and export", "Classes and object-oriented programming"] },
+                    { title: "9. Local Storage and Browser APIs", desc: "Utilize browser capabilities for enhanced functionality.", items: ["LocalStorage and SessionStorage", "Geolocation API", "Canvas API for graphics", "Web Audio API basics", "Form validation and manipulation"] },
+                    { title: "10. Practice Projects", desc: "Build interactive applications to apply your knowledge.", items: ["Create a todo list application", "Build a weather app using API", "Design an interactive quiz game", "Create a movie search application", "Build a calculator with advanced features"] },
+                    { title: "11. Next Steps", desc: "Expand your JavaScript expertise into specialized areas.", items: ["Learn a frontend framework (React, Vue, or Angular)", "Study Node.js for backend development", "Explore TypeScript for type safety", "Master build tools (Webpack, Vite)", "Learn testing frameworks (Jest, Cypress)"] }
+                ]
+            },
+            java: {
+                title: "Java Roadmap",
+                intro: "Java is a robust, object-oriented programming language designed for portability and security. It follows the principle of 'Write Once, Run Anywhere' (WORA), meaning compiled Java code can run on any platform that supports Java without recompilation.",
+                steps: [
+                    { title: "1. Java Fundamentals", desc: "Set up your environment and learn basic syntax.", items: ["Installing JDK and setting up IDE (IntelliJ/Eclipse)", "Understanding JVM, JRE, and JDK", "Variables and data types", "Operators and expressions", "Input/output with Scanner"] },
+                    { title: "2. Control Statements", desc: "Master program flow control with conditional and loop statements.", items: ["If-else and nested if statements", "Switch-case statements", "For, while, and do-while loops", "Enhanced for loop", "Break, continue, and return statements"] },
+                    { title: "3. Object-Oriented Programming", desc: "Learn the core principles of OOP that make Java powerful.", items: ["Classes and objects", "Constructors and methods", "Encapsulation: access modifiers and getters/setters", "Inheritance and the super keyword", "Polymorphism: method overloading and overriding"] },
+                    { title: "4. Advanced OOP Concepts", desc: "Explore abstraction and interface-based programming.", items: ["Abstract classes and methods", "Interfaces and multiple inheritance", "Static and final keywords", "Inner classes and anonymous classes", "Packages and access control"] },
+                    { title: "5. Exception Handling", desc: "Learn to handle errors gracefully in your programs.", items: ["Try-catch-finally blocks", "Checked vs unchecked exceptions", "Throwing and creating custom exceptions", "Best practices for exception handling", "Try-with-resources statement"] },
+                    { title: "6. Collections Framework", desc: "Master Java's powerful data structure library.", items: ["ArrayList, LinkedList, and Vector", "HashMap, TreeMap, and HashSet", "Queue and Stack implementations", "Iterators and for-each loops", "Comparing and sorting collections"] },
+                    { title: "7. File I/O and Streams", desc: "Work with files and data streams effectively.", items: ["Reading and writing text files", "BufferedReader and BufferedWriter", "File and Path classes", "Serialization and deserialization", "Working with directories"] },
+                    { title: "8. Multithreading", desc: "Learn concurrent programming for better performance.", items: ["Creating threads: Thread class and Runnable", "Thread lifecycle and states", "Synchronization and locks", "Executor framework", "Concurrent collections"] },
+                    { title: "9. Lambda and Streams API", desc: "Use modern Java features for functional programming.", items: ["Lambda expressions syntax", "Functional interfaces", "Stream operations: filter, map, reduce", "Optional class", "Method references"] },
+                    { title: "10. Practice Projects", desc: "Build applications to solidify your Java knowledge.", items: ["Create a library management system", "Build a banking application", "Develop a student information system", "Create a simple chat application", "Build a file encryption/decryption tool"] },
+                    { title: "11. Next Steps", desc: "Advance your Java expertise with specialized technologies.", items: ["Learn Spring Framework for enterprise applications", "Study Android development with Kotlin", "Explore JDBC and database connectivity", "Master JUnit for testing", "Learn Maven/Gradle for build automation"] }
+                ]
+            },
+            python: {
+                title: "Python Roadmap",
+                intro: "Python is a high-level, interpreted programming language known for its simple, readable syntax that resembles plain English. It emphasizes code readability and allows programmers to express concepts in fewer lines of code.",
+                steps: [
+                    { title: "1. Python Basics", desc: "Start with Python's simple and intuitive syntax.", items: ["Installing Python and setting up environment", "Variables and data types", "Basic operators and expressions", "Print function and string formatting", "Comments and code documentation"] },
+                    { title: "2. Control Flow", desc: "Learn to control program execution with Python's clean syntax.", items: ["If, elif, else statements", "Boolean logic and comparison operators", "For loops and range function", "While loops", "Break, continue, and pass statements"] },
+                    { title: "3. Data Structures", desc: "Master Python's built-in data structures.", items: ["Lists: creation, indexing, slicing", "Tuples and their immutability", "Dictionaries: key-value pairs", "Sets and set operations", "List comprehensions"] },
+                    { title: "4. Functions", desc: "Create reusable code with functions and modules.", items: ["Defining and calling functions", "Parameters and return values", "Default arguments and keyword arguments", "Lambda functions", "Scope and global variables"] },
+                    { title: "5. Modules and Packages", desc: "Organize code and use Python's extensive standard library.", items: ["Importing modules", "Standard library overview: math, random, datetime", "Creating custom modules", "Pip and package management", "Virtual environments"] },
+                    { title: "6. File Handling", desc: "Read from and write to files effectively.", items: ["Opening and closing files", "Reading: read, readline, readlines", "Writing and appending to files", "Context managers (with statement)", "Working with CSV and JSON files"] },
+                    { title: "7. Object-Oriented Programming", desc: "Learn OOP concepts in Python's elegant way.", items: ["Classes and objects", "Attributes and methods", "Constructors and self parameter", "Inheritance and method overriding", "Encapsulation and property decorators"] },
+                    { title: "8. Exception Handling", desc: "Handle errors gracefully to make robust programs.", items: ["Try-except blocks", "Handling specific exceptions", "Finally and else clauses", "Raising exceptions", "Creating custom exceptions"] },
+                    { title: "9. Working with Libraries", desc: "Leverage popular Python libraries for powerful functionality.", items: ["NumPy for numerical computing", "Pandas for data manipulation", "Matplotlib for data visualization", "Requests for HTTP requests", "Beautiful Soup for web scraping"] },
+                    { title: "10. Practice Projects", desc: "Build real-world applications to apply your skills.", items: ["Create a web scraper", "Build a password generator", "Develop a data analysis project", "Create an automated email sender", "Build a text-based game"] },
+                    { title: "11. Next Steps", desc: "Specialize in Python's most powerful domains.", items: ["Learn Django or Flask for web development", "Study machine learning with scikit-learn and TensorFlow", "Explore data science with Jupyter notebooks", "Master automation with Selenium", "Learn API development with FastAPI"] }
+                ]
+            },
+            cpp: {
+                title: "C++ Roadmap",
+                intro: "C++ is a powerful, high-performance programming language that extends the C language with object-oriented features. It provides low-level memory manipulation while supporting high-level abstractions.",
+                steps: [
+                    { title: "1. C++ Fundamentals", desc: "Set up your development environment and learn basic syntax.", items: ["Installing compiler (GCC, MSVC, or Clang)", "Understanding compilation process", "Variables and data types", "Input/output with cin and cout", "Basic operators"] },
+                    { title: "2. Control Structures", desc: "Master program flow with conditional and loop statements.", items: ["If-else and nested conditionals", "Switch-case statements", "For, while, and do-while loops", "Break and continue", "Logical operators"] },
+                    { title: "3. Functions and Scope", desc: "Learn to organize code with functions and understand scope.", items: ["Function declaration and definition", "Parameters: pass by value and reference", "Return types and void functions", "Function overloading", "Scope and lifetime of variables"] },
+                    { title: "4. Arrays and Strings", desc: "Work with collections of data efficiently.", items: ["One-dimensional and multi-dimensional arrays", "Array manipulation and traversal", "C-style strings and character arrays", "String class and common operations", "Pointers and arrays relationship"] },
+                    { title: "5. Pointers and Memory Management", desc: "Master one of C++'s most powerful and challenging features.", items: ["Understanding memory addresses", "Pointer declaration and dereferencing", "Dynamic memory allocation: new and delete", "Pointer arithmetic", "Avoiding memory leaks"] },
+                    { title: "6. Object-Oriented Programming", desc: "Learn OOP concepts that make C++ powerful for large projects.", items: ["Classes and objects", "Constructors and destructors", "Access specifiers: public, private, protected", "Member functions and data members", "This pointer"] },
+                    { title: "7. Advanced OOP", desc: "Explore inheritance, polymorphism, and advanced class features.", items: ["Inheritance and base classes", "Polymorphism and virtual functions", "Abstract classes and interfaces", "Operator overloading", "Friend functions and classes"] },
+                    { title: "8. STL (Standard Template Library)", desc: "Utilize powerful containers and algorithms from STL.", items: ["Vectors, lists, and deques", "Maps, sets, and unordered containers", "Iterators and their usage", "Common algorithms: sort, find, transform", "Function objects and lambda expressions"] },
+                    { title: "9. File Handling and Exceptions", desc: "Work with files and handle errors gracefully.", items: ["File streams: ifstream, ofstream", "Reading and writing files", "Binary file operations", "Exception handling: try-catch-throw", "Standard exception classes"] },
+                    { title: "10. Practice Projects", desc: "Build applications to strengthen your C++ skills.", items: ["Create a student management system", "Build a simple text-based game", "Develop a file compression tool", "Create a basic banking system", "Build a console-based graphics program"] },
+                    { title: "11. Next Steps", desc: "Advance into specialized C++ domains.", items: ["Learn modern C++ (C++11, C++14, C++17, C++20)", "Study game development with SDL or SFML", "Explore Qt framework for GUI applications", "Master advanced topics: templates, multithreading", "Learn data structures and algorithms in C++"] }
+                ]
+            }
+        };
+
+        // 6. Roadmap Display Logic
+        function showRoadmap(lang) {
+            const displayArea = document.getElementById('roadmap-display-area');
+            const data = roadmapData[lang];
+            
+            if (!data) return;
+
+            // Smooth scroll
+            displayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Build HTML with Original Content structure
+            let stepsHtml = '';
+            data.steps.forEach((step, i) => {
+                stepsHtml += `
+                    <div class="step-item" style="animation-delay: ${i * 0.1}s">
+                        <div class="step-dot"></div>
+                        <h4>${step.title}</h4>
+                        <p>${step.desc}</p>
+                        <ul>
+                            ${step.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            });
+
+            displayArea.innerHTML = `
+                <div class="roadmap-container active">
+                    <button class="back-btn" onclick="closeRoadmap()">← Back to Languages</button>
+                    <div class="section-header">
+                        <h2>${data.title}</h2>
+                    </div>
+                    <div class="roadmap-intro">
+                        <h3>Overview</h3>
+                        <p>${data.intro}</p>
+                    </div>
+                    <div class="roadmap-timeline">
+                        ${stepsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function closeRoadmap() {
+            const displayArea = document.getElementById('roadmap-display-area');
+            const section = document.getElementById('languages');
+            displayArea.innerHTML = '';
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
